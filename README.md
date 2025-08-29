@@ -36,7 +36,7 @@
   - `FrameIndex` = 7 digits (frame number **within the clip**)
 
 > **Important logic for phase sub‑clips**  
-> In filenames like `PH_0002_0001_S1_0001_P01_01.mp4`:
+> In filenames like `PH_0001_0002_S1_0001_P01_01.mp4`:
 > - The `0001` **after `S1`** is `SubclipOrder` → the **temporal order of the sub‑clip in the original raw video** (first extracted sub‑clip).
 > - The trailing `01` is `PhaseOccurrence` → the **first time phase `P01` occurs** in that raw video.  
 > Phases may recur; occurrences are counted even if other phases appear in between.
@@ -46,13 +46,13 @@
 - **Raw video:**  
   `RV_<RawVideoID>_S<Site>.mp4`
 - **Subset clip (videos/ & full‑video CSVs):**  
-  `<PREFIX>_<RawVideoID>_<ClipID>_S<Site>.<ext>`
+  `<PREFIX>_<ClipID>_<RawVideoID>_S<Site>.<ext>`
 - **Phase sub‑clip (phase‑specific segments):**  
-  `PH_<RawVideoID>_<ClipID>_S<Site>_<SubclipOrder>_P<PhaseID>_<PhaseOccurrence>.mp4`
+  `PH_<ClipID>_<RawVideoID>_S<Site>_<SubclipOrder>_P<PhaseID>_<PhaseOccurrence>.mp4`
 - **Per‑frame images (segmentation/tracking):**  
-  `<SE|TR>_<RawVideoID>_<ClipID>_S<Site>_<FrameIndex>.png`
+  `<SE|TR>_<ClipID>_<RawVideoID>_S<Site>_<FrameIndex>.png`
 - **Tracking annotation folder:**  
-  `TR_S<Site>_<RawVideoID>_<ClipID>/` (site‑grouped folder; files inside still end with `_S<Site>`)
+  `TR_S<Site>_<ClipID>_<RawVideoID>/` (site‑grouped folder; files inside still end with `_S<Site>`)
 
 ---
 
@@ -88,29 +88,29 @@ Cataract-LMM/
 │   │  └─ 📄 Subset details and phase taxonomy notes.
 │   ├── videos/
 │   │  │  Curated clips used for phase recognition (150 total).
-│   │  │  🧭 Pattern: PH_<RawVideoID>_<ClipID>_S<Site>.mp4
+│   │  │  🧭 Pattern: PH_<ClipID>_<RawVideoID>_S<Site>.mp4
 │   │  │  • <ClipID> is the subset-local index within this folder (1…150).
-│   │  ├── PH_0002_0001_S1.mp4
-│   │  │   └─ 🎬 Derived from RawVideoID=0002; subset ClipID=0001; Site=S1 (Farabi).
+│   │  ├── PH_0001_0002_S1.mp4
+│   │  │   └─ 🎬 Subset ClipID=0001; RawVideoID=0002; Site=S1 (Farabi).
 │   │  └── ...
 │   │
 │   ├── annotations_full_video/
 │   │  │  One CSV per subset clip with frame-level phase labels (150 CSVs).
-│   │  │  🧭 Pattern: PH_<RawVideoID>_<ClipID>_S<Site>.csv  (same stem as its video)
-│   │  ├── PH_0002_0001_S1.csv
-│   │  │   └─ 📄 Labels for PH_0002_0001_S1.mp4 (full-clip timeline; one label per frame).
+│   │  │  🧭 Pattern: PH_<ClipID>_<RawVideoID>_S<Site>.csv  (same stem as its video)
+│   │  ├── PH_0001_0002_S1.csv
+│   │  │   └─ 📄 Labels for PH_0001_0002_S1.mp4 (full-clip timeline; one label per frame).
 │   │  └── ...
 │   │
 │   └── annotations_sub_clips/
 │       │  Phase-specific segments extracted from each subset clip.
 │       │  📁 One folder per subset clip:
-│       │  🧭 Folder pattern: PH_<RawVideoID>_<ClipID>_S<Site>/
-│       │  🧭 File pattern:   PH_<RawVideoID>_<ClipID>_S<Site>_<SubclipOrder>_P<PhaseID>_<PhaseOccurrence>.mp4
+│       │  🧭 Folder pattern: PH_<ClipID>_<RawVideoID>_S<Site>/
+│       │  🧭 File pattern:   PH_<ClipID>_<RawVideoID>_S<Site>_<SubclipOrder>_P<PhaseID>_<PhaseOccurrence>.mp4
 │       │   • <SubclipOrder> (4 digits) = temporal order of this sub-clip in the **original raw video**.
 │       │   • <PhaseOccurrence> (2 digits) = the n-th time that phase appears in the **original raw video**.
-│       ├── PH_0002_0001_S1/
-│       │   ├── PH_0002_0001_S1_0001_P01_01.mp4
-│       │   │   └─ 🎬 RawVideoID=0002; ClipID=0001; Site=S1; SubclipOrder=0001 (first sub-clip in raw timeline);
+│       ├── PH_0001_0002_S1/
+│       │   ├── PH_0001_0002_S1_0001_P01_01.mp4
+│       │   │   └─ 🎬 ClipID=0001; RawVideoID=0002; Site=S1; SubclipOrder=0001 (first sub-clip in raw timeline);
 │       │   │      PhaseID=P01; PhaseOccurrence=01 (first occurrence of P01 in that raw video).
 │       │   └── ...
 │       └── ...
@@ -122,29 +122,29 @@ Cataract-LMM/
 │   │  └─ 📄 Subset details and annotation schema.
 │   ├── videos/
 │   │  │  Source clips from which frames were sampled (150 total).
-│   │  │  🧭 Pattern: SE_<RawVideoID>_<ClipID>_S<Site>.mp4
-│   │  ├── SE_0002_0001_S1.mp4
-│   │  │   └─ 🎬 Derived from RawVideoID=0002; subset ClipID=0001; Site=S1.
+│   │  │  🧭 Pattern: SE_<ClipID>_<RawVideoID>_S<Site>.mp4
+│   │  ├── SE_0001_0002_S1.mp4
+│   │  │   └─ 🎬 ClipID=0001; RawVideoID=0002; Site=S1.
 │   │  └── ...
 │   │
 │   └── annotations/
 │       ├── coco_json/
 │       │   ├── images/
 │       │   │   │  All annotated frames: 6,094 images.
-│       │   │   │  🧭 Pattern: SE_<RawVideoID>_<ClipID>_S<Site>_<FrameIndex>.png
-│       │   │   ├── SE_0003_0002_S2_0000045.png
-│       │   │   │   └─ 🖼 RawVideoID=0003; ClipID=0002; Site=S2; FrameIndex=0000045 (45th frame of this clip).
+│       │   │   │  🧭 Pattern: SE_<ClipID>_<RawVideoID>_S<Site>_<FrameIndex>.png
+│       │   │   ├── SE_0002_0003_S2_0000045.png
+│       │   │   │   └─ 🖼 ClipID=0002; RawVideoID=0003; Site=S2; FrameIndex=0000045 (45th frame of this clip).
 │       │   │   └── ... (6,094 total)
 │       │   └── annotations.json
 │       │       └─ 📄 COCO annotations enumerating all 6,094 frames.
 │       │
 │       └── yolo_txt/
 │           ├── images/
-│           │   ├── SE_0003_0002_S2_0000045.png
+│           │   ├── SE_0002_0003_S2_0000045.png
 │           │   │   └─ 🖼 Same image split as COCO/images.
 │           │   └── ... (6,094 total)
 │           └── labels/
-│               ├── SE_0003_0002_S2_0000045.txt
+│               ├── SE_0002_0003_S2_0000045.txt
 │               │   └─ 🏷 Label file matching the image stem (one-to-one).
 │               └── ... (6,094 total)
 │
@@ -155,21 +155,21 @@ Cataract-LMM/
 │   │  └─ 📄 Subset details and tracking format.
 │   ├── videos/
 │   │  │  170 tracking clips.
-│   │  │  🧭 Pattern: TR_<RawVideoID>_<ClipID>_S<Site>.mp4
-│   │  ├── TR_0004_0003_S1.mp4
-│   │  │   └─ 🎬 Derived from RawVideoID=0004; subset ClipID=0003; Site=S1.
+│   │  │  🧭 Pattern: TR_<ClipID>_<RawVideoID>_S<Site>.mp4
+│   │  ├── TR_0003_0004_S1.mp4
+│   │  │   └─ 🎬 ClipID=0003; RawVideoID=0004; Site=S1.
 │   │  └── ...
 │   │
 │   └── annotations/
 │       │  One folder per tracking clip (170 total).
-│       │  🧭 Folder pattern: TR_S<Site>_<RawVideoID>_<ClipID>/
-│       │  Files inside follow the standard TR_<RawVideoID>_<ClipID>_S<Site>_<FrameIndex>.png stem.
-│       ├── TR_S1_0004_0003/
-│       │   ├── TR_0004_0003_S1.json
+│       │  🧭 Folder pattern: TR_S<Site>_<ClipID>_<RawVideoID>/
+│       │  Files inside follow the standard TR_<ClipID>_<RawVideoID>_S<Site>_<FrameIndex>.png stem.
+│       ├── TR_S1_0003_0004/
+│       │   ├── TR_0003_0004_S1.json
 │       │   │   └─ 📄 Dense frame-by-frame tracking for this clip.
-│       │   ├── TR_0004_0003_S1_0000001.png
+│       │   ├── TR_0003_0004_S1_0000001.png
 │       │   │   └─ 🖼 FrameIndex=0000001 (first frame of the clip).
-│       │   ├── TR_0004_0003_S1_0000002.png
+│       │   ├── TR_0003_0004_S1_0000002.png
 │       │   │   └─ 🖼 FrameIndex=0000002 (second frame), etc.
 │       │   └── ...
 │       └── ...
@@ -180,9 +180,9 @@ Cataract-LMM/
     ├── README.md
     │  └─ 📄 Subset details and scoring rubric.
     ├── videos/
-    │  │  🧭 Pattern: SK_<RawVideoID>_<ClipID>_S<Site>.mp4
-    │  ├── SK_0004_0003_S1.mp4
-    │  │   └─ 🎬 Same stem as TR_0004_0003_S1.mp4 (identical clip content).
+    │  │  🧭 Pattern: SK_<ClipID>_<RawVideoID>_S<Site>.mp4
+    │  ├── SK_0003_0004_S1.mp4
+    │  │   └─ 🎬 Same stem as TR_0003_0004_S1.mp4 (identical clip content).
     │  └── ...
     │
     └── annotations/
@@ -195,16 +195,16 @@ Cataract-LMM/
 ## 🔍 Worked Examples (full decoding)
 
 - **`RV_0002_S2.mp4`** → `RV` (raw) • `RawVideoID=0002` • `S2` (Noor).  
-- **`PH_0002_0001_S1.mp4`** → `PH` (phase) • `RawVideoID=0002` • `ClipID=0001` (first curated clip in the `2_Phase_Recognition/videos/` subset) • `S1` (Farabi).  
-- **`PH_0002_0001_S1.csv`** → CSV labels aligned to `PH_0002_0001_S1.mp4` (frame‑level phases for the full clip).  
-- **`PH_0002_0001_S1_0001_P01_01.mp4`** → Sub‑clip for **phase `P01`** from the same stem; `SubclipOrder=0001` (**first sub‑clip in the raw video’s timeline**); `PhaseOccurrence=01` (**first time `P01` appears** in that raw video).  
-- **`SE_0002_0001_S1.mp4`** → Segmentation source clip; `RawVideoID=0002` • `ClipID=0001` • `S1`.  
-- **`SE_0003_0002_S2_0000045.png`** → Segmentation frame; `RawVideoID=0003` • `ClipID=0002` • `S2` • `FrameIndex=0000045` (frame 45 **within the clip**).  
-- **`SE_0003_0002_S2_0000045.txt`** → YOLO label that pairs **one‑to‑one** with the image of the same stem.  
-- **`TR_0004_0003_S1.mp4`** → Tracking clip; `RawVideoID=0004` • `ClipID=0003` • `S1`.  
-- **`TR_S1_0004_0003/`** → Site‑grouped annotation folder for the same tracking clip.  
-  - **`TR_0004_0003_S1_0000001.png`** → Tracking frame 1 (`FrameIndex=0000001`) of that clip.  
-- **`SK_0004_0003_S1.mp4`** → Skill‑assessment video matching the tracking clip stem.  
+- **`PH_0001_0002_S1.mp4`** → `PH` (phase) • `ClipID=0001` (first curated clip in the `2_Phase_Recognition/videos/` subset) • `RawVideoID=0002` • `S1` (Farabi).  
+- **`PH_0001_0002_S1.csv`** → CSV labels aligned to `PH_0001_0002_S1.mp4` (frame‑level phases for the full clip).  
+- **`PH_0001_0002_S1_0001_P01_01.mp4`** → Sub‑clip for **phase `P01`**; `ClipID=0001`; `RawVideoID=0002`; `S1`; `SubclipOrder=0001` (**first sub‑clip in the raw video’s timeline**); `PhaseOccurrence=01` (**first time `P01` appears** in that raw video).  
+- **`SE_0001_0002_S1.mp4`** → Segmentation source clip; `ClipID=0001` • `RawVideoID=0002` • `S1`.  
+- **`SE_0002_0003_S2_0000045.png`** → Segmentation frame; `ClipID=0002` • `RawVideoID=0003` • `S2` • `FrameIndex=0000045`.  
+- **`SE_0002_0003_S2_0000045.txt`** → YOLO label paired one‑to‑one with its image.  
+- **`TR_0003_0004_S1.mp4`** → Tracking clip; `ClipID=0003` • `RawVideoID=0004` • `S1`.  
+- **`TR_S1_0003_0004/`** → Annotation folder for the same clip.  
+  - **`TR_0003_0004_S1_0000001.png`** → Frame 1 (`FrameIndex=0000001`) of that clip.  
+- **`SK_0003_0004_S1.mp4`** → Skill‑assessment video matching the tracking clip stem.  
 - **`skill_scores.csv`** → One record per `SK`/`TR` stem (170 total), with objective skill metrics.
 
 ---
@@ -221,7 +221,7 @@ Cataract-LMM/
 | `PhaseOccurrence` (`01`…`) | The n‑th time **that phase** appears in the **original raw video** | Per raw video & phase |
 | `FrameIndex` (`0000001`…`) | Frame number **within a given clip** | Per clip |
 
-> Tip: The **same stem** (e.g., `PH_0002_0001_S1`) ties together the subset video and its full‑video CSV, while **sub‑clips** extend that stem with `_SubclipOrder_Pxx_PhaseOccurrence`.
+> Tip: The **same stem** (e.g., `PH_0001_0002_S1`) ties together the subset video and its full‑video CSV, while **sub‑clips** extend that stem with `_SubclipOrder_Pxx_PhaseOccurrence`.
 
 ---
 
