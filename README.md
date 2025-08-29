@@ -166,9 +166,9 @@ Cataract-LMM/
 │   │
 │   └── annotations/
 │       │  One folder per tracking clip (170 total).
-│       │  🧭 Folder pattern: TR_S<Site>_<ClipID>_P03/
+│       │  🧭 Folder pattern: TR_<ClipID>_S<Site>_P03/
 │       │  Files inside follow the standard TR_<ClipID>_S<Site>_P03_<FrameIndex>.png stem.
-│       ├── TR_S1_0003_P03/
+│       ├── TR_0003_S1_P03/
 │       │   ├── TR_0003_S1_P03.json
 │       │   │   └─ 📄 Dense frame-by-frame tracking for this clip.
 │       │   ├── TR_0003_S1_P03_0000001.png
