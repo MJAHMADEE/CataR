@@ -23,7 +23,7 @@
 - `RV` = Raw Video  
 - `PH` = Phase Recognition  
 - `SE` = Instance Segmentation  
-- `TR` = Instrument Tracking (capsulorhexis clips)  
+- `TR` = Instrument Tracking
 - `SK` = Skill Assessment
 
 **Indexing & zero‑padding**
