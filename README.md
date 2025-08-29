@@ -6,7 +6,7 @@
 > - **Instance segmentation frames:** 6,094
 > - **Phase‑recognition clips:** 150  
 > - **Segmentation source clips:** 150  
-> - **Instrument‑tracking clips (capsulorhexis):** 170  
+> - **Instrument‑tracking clips:** 170  
 > - **Skill‑assessment clips:** 170
 
 **Legend:** 📁 folder · 📄 text/CSV · 🎬 video · 🖼 image · 🏷 label · 🧭 naming rule · 🏥 site
