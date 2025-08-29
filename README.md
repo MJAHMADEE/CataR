@@ -2,8 +2,8 @@
 
 > **At a glance**
 >
-> - **Raw source videos:** **3,000**
-> - **Instance segmentation frames:** **6,094**
+> - **Raw source videos:** 3,000
+> - **Instance segmentation frames:** 6,094
 > - **Phase‑recognition clips:** 150  
 > - **Segmentation source clips:** 150  
 > - **Instrument‑tracking clips (capsulorhexis):** 170  
@@ -24,7 +24,7 @@
 - `PH` = Phase Recognition  
 - `SE` = Instance Segmentation  
 - `TR` = Instrument Tracking (capsulorhexis clips)  
-- `SK` = Skill Assessment (same clips as `TR`)
+- `SK` = Skill Assessment
 
 **Indexing & zero‑padding**
 - All counters are **1‑based** and **zero‑padded**  
@@ -50,9 +50,13 @@
 - **Phase sub‑clip (phase‑specific segments):**  
   `PH_<ClipID>_<RawVideoID>_S<Site>_<SubclipOrder>_P<PhaseID>_<PhaseOccurrence>.mp4`
 - **Per‑frame images (segmentation/tracking):**  
-  `<SE|TR>_<ClipID>_<RawVideoID>_S<Site>_<FrameIndex>.png`
+  `<SE>_<ClipID>_<RawVideoID>_S<Site>_<FrameIndex>.png`
+- **Tracking video:**  
+  `TR_<ClipID>_S<Site>_P03.mp4`
 - **Tracking annotation folder:**  
-  `TR_S<Site>_<ClipID>_<RawVideoID>/` (site‑grouped folder; files inside still end with `_S<Site>`)
+  `TR_S<Site>_<ClipID>_P03/`
+- **Skill video:**  
+  `SK_<ClipID>_S<Site>_P03.mp4`
 
 ---
 
@@ -149,40 +153,40 @@ Cataract-LMM/
 │               └── ... (6,094 total)
 │
 ├── 4_Instrument_Tracking/
-│   │  Spatiotemporal analysis of instruments (all clips are **capsulorhexis**).
+│   │  Spatiotemporal analysis of instruments (capsulorhexis).
 │   │
 │   ├── README.md
 │   │  └─ 📄 Subset details and tracking format.
 │   ├── videos/
 │   │  │  170 tracking clips.
-│   │  │  🧭 Pattern: TR_<ClipID>_<RawVideoID>_S<Site>.mp4
-│   │  ├── TR_0003_0004_S1.mp4
-│   │  │   └─ 🎬 ClipID=0003; RawVideoID=0004; Site=S1.
+│   │  │  🧭 Pattern: TR_<ClipID>_S<Site>_P03.mp4
+│   │  ├── TR_0003_S1_P03.mp4
+│   │  │   └─ 🎬 ClipID=0003; Site=S1; P03 indicates capsulorhexis phase.
 │   │  └── ...
 │   │
 │   └── annotations/
 │       │  One folder per tracking clip (170 total).
-│       │  🧭 Folder pattern: TR_S<Site>_<ClipID>_<RawVideoID>/
-│       │  Files inside follow the standard TR_<ClipID>_<RawVideoID>_S<Site>_<FrameIndex>.png stem.
-│       ├── TR_S1_0003_0004/
-│       │   ├── TR_0003_0004_S1.json
+│       │  🧭 Folder pattern: TR_S<Site>_<ClipID>_P03/
+│       │  Files inside follow the standard TR_<ClipID>_S<Site>_P03_<FrameIndex>.png stem.
+│       ├── TR_S1_0003_P03/
+│       │   ├── TR_0003_S1_P03.json
 │       │   │   └─ 📄 Dense frame-by-frame tracking for this clip.
-│       │   ├── TR_0003_0004_S1_0000001.png
+│       │   ├── TR_0003_S1_P03_0000001.png
 │       │   │   └─ 🖼 FrameIndex=0000001 (first frame of the clip).
-│       │   ├── TR_0003_0004_S1_0000002.png
+│       │   ├── TR_0003_S1_P03_0000002.png
 │       │   │   └─ 🖼 FrameIndex=0000002 (second frame), etc.
 │       │   └── ...
 │       └── ...
 │
 └── 5_Skill_Assessment/
-    │  Objective surgical skill ratings (same 170 clips as tracking).
+    │  Objective surgical skill ratings.
     │
     ├── README.md
     │  └─ 📄 Subset details and scoring rubric.
     ├── videos/
-    │  │  🧭 Pattern: SK_<ClipID>_<RawVideoID>_S<Site>.mp4
-    │  ├── SK_0003_0004_S1.mp4
-    │  │   └─ 🎬 Same stem as TR_0003_0004_S1.mp4 (identical clip content).
+    │  │  🧭 Pattern: SK_<ClipID>_S<Site>_P03.mp4
+    │  ├── SK_0003_S1_P03.mp4
+    │  │   └─ 🎬 Skill-assessment clip; ClipID=0003; Site=S1; P03 indicates capsulorhexis phase.
     │  └── ...
     │
     └── annotations/
@@ -195,17 +199,16 @@ Cataract-LMM/
 ## 🔍 Worked Examples (full decoding)
 
 - **`RV_0002_S2.mp4`** → `RV` (raw) • `RawVideoID=0002` • `S2` (Noor).  
-- **`PH_0001_0002_S1.mp4`** → `PH` (phase) • `ClipID=0001` (first curated clip in the `2_Phase_Recognition/videos/` subset) • `RawVideoID=0002` • `S1` (Farabi).  
-- **`PH_0001_0002_S1.csv`** → CSV labels aligned to `PH_0001_0002_S1.mp4` (frame‑level phases for the full clip).  
-- **`PH_0001_0002_S1_0001_P01_01.mp4`** → Sub‑clip for **phase `P01`**; `ClipID=0001`; `RawVideoID=0002`; `S1`; `SubclipOrder=0001` (**first sub‑clip in the raw video’s timeline**); `PhaseOccurrence=01` (**first time `P01` appears** in that raw video).  
-- **`SE_0001_0002_S1.mp4`** → Segmentation source clip; `ClipID=0001` • `RawVideoID=0002` • `S1`.  
-- **`SE_0002_0003_S2_0000045.png`** → Segmentation frame; `ClipID=0002` • `RawVideoID=0003` • `S2` • `FrameIndex=0000045`.  
-- **`SE_0002_0003_S2_0000045.txt`** → YOLO label paired one‑to‑one with its image.  
-- **`TR_0003_0004_S1.mp4`** → Tracking clip; `ClipID=0003` • `RawVideoID=0004` • `S1`.  
-- **`TR_S1_0003_0004/`** → Annotation folder for the same clip.  
-  - **`TR_0003_0004_S1_0000001.png`** → Frame 1 (`FrameIndex=0000001`) of that clip.  
-- **`SK_0003_0004_S1.mp4`** → Skill‑assessment video matching the tracking clip stem.  
-- **`skill_scores.csv`** → One record per `SK`/`TR` stem (170 total), with objective skill metrics.
+- **`PH_0001_0002_S1.mp4`** → `PH` (phase) • `ClipID=0001` • `RawVideoID=0002` • `S1` (Farabi).  
+- **`PH_0001_0002_S1.csv`** → CSV labels aligned to `PH_0001_0002_S1.mp4`.  
+- **`PH_0001_0002_S1_0001_P01_01.mp4`** → Sub‑clip for **phase `P01`**.  
+- **`SE_0001_0002_S1.mp4`** → Segmentation source clip.  
+- **`SE_0002_0003_S2_0000045.png`** → Segmentation frame.  
+- **`TR_0003_S1_P03.mp4`** → Tracking clip; `ClipID=0003`; `S1`; `P03` indicates capsulorhexis phase.  
+- **`TR_S1_0003_P03/`** → Annotation folder.  
+  - **`TR_0003_S1_P03_0000001.png`** → Frame 1 (`FrameIndex=0000001`).  
+- **`SK_0003_S1_P03.mp4`** → Skill‑assessment video; `ClipID=0003`; `S1`; `P03` indicates capsulorhexis phase.  
+- **`skill_scores.csv`** → One record per `SK`/`TR` stem.
 
 ---
 
@@ -217,17 +220,15 @@ Cataract-LMM/
 | `ClipID` (`0001`…`) | Index **within a subset’s `videos/` folder** | Local to each subset |
 | `S1` / `S2` | **S1 = Farabi**, **S2 = Noor** | Site/Hospital |
 | `SubclipOrder` (`0001`…`) | Temporal order of the **sub‑clip** in the **original raw video** | Per raw video |
-| `Pxx` | Surgical **phase** code (e.g., `P01`) | Phase taxonomy |
+| `Pxx` | Surgical **phase** code (e.g., `P01`, `P03`) | Phase taxonomy |
 | `PhaseOccurrence` (`01`…`) | The n‑th time **that phase** appears in the **original raw video** | Per raw video & phase |
 | `FrameIndex` (`0000001`…`) | Frame number **within a given clip** | Per clip |
-
-> Tip: The **same stem** (e.g., `PH_0001_0002_S1`) ties together the subset video and its full‑video CSV, while **sub‑clips** extend that stem with `_SubclipOrder_Pxx_PhaseOccurrence`.
 
 ---
 
 ## ✅ Consistency Guarantees
 
-- **Counts:** The repository contains **3,000** raw videos and **6,094** instance‑segmentation frames; all derivative splits reference these sources consistently.  
+- **Counts:** The repository contains **3,000** raw videos and **6,094** instance‑segmentation frames.  
 - **One‑to‑one stems:** Wherever an image and label coexist (e.g., YOLO), filenames match **exactly** except for the extension.  
 - **Zero‑padded, 1‑based indices:** Facilitate stable sorting and easy parsing across all subsets.  
 
