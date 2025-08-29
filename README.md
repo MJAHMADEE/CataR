@@ -225,11 +225,3 @@ Cataract-LMM/
 | `FrameIndex` (`0000001`…`) | Frame number **within a given clip** | Per clip |
 
 ---
-
-## ✅ Consistency Guarantees
-
-- **Counts:** The repository contains **3,000** raw videos and **6,094** instance‑segmentation frames.  
-- **One‑to‑one stems:** Wherever an image and label coexist (e.g., YOLO), filenames match **exactly** except for the extension.  
-- **Zero‑padded, 1‑based indices:** Facilitate stable sorting and easy parsing across all subsets.  
-
----
